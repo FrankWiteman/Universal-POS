@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Run POS API (local)",
+      "request": "launch",
+      "mainClass": "com.universalpos.PosApiApplication",
+      "projectName": "pos-api",
+      "args": "--spring.profiles.active=local",
+      "env": {}
+    }
+  ]
+}
