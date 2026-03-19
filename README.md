@@ -22,6 +22,13 @@ Any company can deploy this, configure it for their brand, and run a full store 
 | PDF receipt generation | ✅ |
 | Email receipt (branded HTML) | ✅ |
 | Async audit trail | ✅ |
+| Supplier management | ✅ |
+| Purchase orders (create, submit, receive) | ✅ |
+| Partial PO receipt support | ✅ |
+| Low stock alerts | ✅ |
+| Manual stock adjustments (damage, theft, correction) | ✅ |
+| Physical stock count sessions with variance tracking | ✅ |
+| Full inventory adjustment audit trail | ✅ |
 | Returns & exchanges | 🔜 Phase 2 |
 | Manager reporting dashboard | 🔜 Phase 3 |
 | JavaFX register terminal UI | 🔜 Phase 4 |
@@ -32,8 +39,8 @@ Any company can deploy this, configure it for their brand, and run a full store 
 
 | Layer | Technology |
 |---|---|
-| Language | Java 21 (LTS) |
-| Framework | Spring Boot 3.2 |
+| Language | Java 21 LTS |
+| Framework | Spring Boot 3.4.4 |
 | Database | Oracle 21c |
 | ORM | Hibernate 6 / Spring Data JPA |
 | Migrations | Flyway 10 |
@@ -43,6 +50,14 @@ Any company can deploy this, configure it for their brand, and run a full store 
 | Email | Jakarta Mail + Thymeleaf |
 | Build | Maven (multi-module) |
 | Containers | Docker + Docker Compose |
+
+---
+
+## ⚠️ Java Version Requirement
+
+**Use Java 21 LTS exactly.** Java 22, 23, 24, and 25 all break Lombok due to internal compiler changes in newer JDKs. Java 21 is supported until 2031 and is the standard for enterprise Java.
+
+Download: https://adoptium.net/temurin/releases/?version=21
 
 ---
 
@@ -62,7 +77,7 @@ JavaFX Terminal  →  Spring Boot REST API  →  Oracle Database
 
 ## 🚀 Quick Start
 
-**Prerequisites:** Java 21, Maven 3.9+, Docker Desktop (4 GB RAM minimum)
+**Prerequisites:** Java 21 LTS, Maven 3.9+, Docker Desktop (4 GB RAM minimum)
 
 ```bash
 # 1. Start Oracle database + MailHog (local email catcher)
@@ -79,9 +94,9 @@ cd .. && mvn clean install -DskipTests
 cd pos-api && mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-Server starts at `http://localhost:8080/api`
+Server: `http://localhost:8080/api`
 
-**Swagger UI (interactive API docs):** `http://localhost:8080/api/swagger-ui.html`
+Swagger UI: `http://localhost:8080/api/swagger-ui.html`
 
 **Test login:**
 ```bash
@@ -100,7 +115,7 @@ universal-pos/
 ├── pos-terminal/     JavaFX desktop register UI (Phase 4)
 ├── docker/           Docker Compose + Oracle init scripts
 ├── PROJECT.md        Full architecture, schema, and decision log
-└── README.md         Setup guide
+└── README.md         This file
 ```
 
 ---
@@ -118,12 +133,22 @@ universal-pos/
 | `POST /transactions/{id}/void` | Void transaction (Manager+) |
 | `POST /receipts/{id}/email` | Email receipt |
 | `GET /receipts/{id}/pdf` | Download PDF receipt |
+| `GET /inventory/low-stock` | Products at/below reorder point |
+| `GET /inventory/suppliers` | List all suppliers |
+| `POST /inventory/suppliers` | Create supplier (Manager+) |
+| `POST /inventory/purchase-orders` | Create purchase order (Manager+) |
+| `POST /inventory/purchase-orders/{id}/submit` | Submit PO to supplier (Manager+) |
+| `POST /inventory/purchase-orders/{id}/receive` | Receive PO items — updates stock (Manager+) |
+| `POST /inventory/adjustments` | Manual stock adjustment (Manager+) |
+| `POST /inventory/stock-counts/start` | Start stock count session (Manager+) |
+| `POST /inventory/stock-counts/{id}/complete` | Complete count + apply variances (Manager+) |
 
 ---
 
 ## 🗺️ Roadmap
 
 - [x] Phase 1 — Full backend foundation (auth, customers, products, discounts, transactions, receipts)
+- [x] Phase 1.5 — Full inventory system (suppliers, purchase orders, stock counts, adjustments)
 - [ ] Phase 2 — Returns & exchanges
 - [ ] Phase 3 — Reporting + admin dashboard + tenant management
 - [ ] Phase 4 — JavaFX register terminal UI
