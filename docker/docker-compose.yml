@@ -1,0 +1,50 @@
+# ============================================================
+#  UniversalPOS — Docker Compose
+#  Runs Oracle XE 21c database for local development
+# ============================================================
+
+version: '3.8'
+
+services:
+
+  # ── Oracle Database 21c Express Edition ───────────────────
+  oracle-db:
+    image: gvenzl/oracle-xe:21-slim-faststart
+    container_name: universalpos-oracle
+    environment:
+      ORACLE_PASSWORD: UniversalPOS_Dev_2024!   # SYS / SYSTEM password
+      APP_USER: universalpos                     # App-specific user created automatically
+      APP_USER_PASSWORD: UniversalPOS_Dev_2024!
+    ports:
+      - "1521:1521"     # Oracle listener
+      - "5500:5500"     # Enterprise Manager (optional)
+    volumes:
+      - oracle-data:/opt/oracle/oradata         # Persist DB across restarts
+      - ./oracle-init:/container-entrypoint-initdb.d  # Run init scripts on first start
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s   # Oracle takes ~60-90s on first run
+    restart: unless-stopped
+    networks:
+      - pos-network
+
+  # ── MailHog (local SMTP server for testing email receipts) ─
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: universalpos-mailhog
+    ports:
+      - "1025:1025"     # SMTP — point Spring Mail here for local dev
+      - "8025:8025"     # MailHog web UI — view sent emails at http://localhost:8025
+    networks:
+      - pos-network
+
+volumes:
+  oracle-data:
+    driver: local
+
+networks:
+  pos-network:
+    driver: bridge

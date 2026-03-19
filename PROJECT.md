@@ -1,7 +1,28 @@
 # PROJECT.md — UniversalPOS Technical Reference
 > Last Updated: 2026-03-17 | Version: 0.2.0 — Phase 1 Complete
 
-This document is the technical brain dump — architecture decisions, schema details, why things were built the way they were, and commands for every task. The README.md is for getting started. This file is for going deep.
+This document is the technical brain dump — architecture decisions, schema details, why things were built the way they were, and commands for every task.
+
+---
+
+## 📄 Documentation System
+
+This project has three docs files. Each has a specific audience and scope:
+
+| File | Pushed to GitHub? | Purpose |
+|---|---|---|
+| `README.md` | ✅ Yes — public | Short overview, quick start, API list, brief changelog. What strangers on GitHub see. |
+| `README-personal.md` | ❌ No — local only | Full step-by-step setup, every command explained, complete troubleshooting, full changelog. Your working reference. |
+| `PROJECT.md` | ❌ No — local only | This file. Architecture, schema, all decisions and reasons, every developer command. |
+
+`README-personal.md` and `PROJECT.md` are listed in `.gitignore` — Git ignores them completely. They live on your machine only.
+
+**Update rule — every time you change something:**
+- `README.md`: one-line changelog entry, update the feature table tick if a feature ships
+- `README-personal.md`: full changelog entry with everything that changed and why
+- `PROJECT.md`: check off phase items, add any new decisions to the decisions table, bump the version history row
+
+---
 
 ---
 
