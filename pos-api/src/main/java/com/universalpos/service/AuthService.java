@@ -3,7 +3,6 @@ package com.universalpos.service;
 import com.universalpos.domain.Employee;
 import com.universalpos.dto.request.LoginRequest;
 import com.universalpos.dto.response.LoginResponse;
-import com.universalpos.exception.ResourceNotFoundException;
 import com.universalpos.repository.EmployeeRepository;
 import com.universalpos.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;

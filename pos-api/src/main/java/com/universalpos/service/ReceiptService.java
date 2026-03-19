@@ -21,7 +21,6 @@ import org.thymeleaf.context.Context;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.nio.file.*;
 import java.time.format.DateTimeFormatter;
 
 @Service
@@ -100,8 +99,6 @@ public class ReceiptService {
 
             PDFont fontBold    = new PDType1Font(Standard14Fonts.FontName.HELVETICA_BOLD);
             PDFont fontRegular = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
-            PDFont fontMono    = new PDType1Font(Standard14Fonts.FontName.COURIER);
-
             try (PDPageContentStream cs = new PDPageContentStream(doc, page)) {
                 float margin = 10f;
                 float y      = pageHeight - 20f;

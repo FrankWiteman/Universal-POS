@@ -31,7 +31,6 @@ public class TransactionService {
     private final DiscountEngine        discountEngine;
     private final CustomerService       customerService;
     private final AuditService          auditService;
-    private final ReceiptService        receiptService;
 
     /**
      * Process and complete a sale transaction.

@@ -6,6 +6,7 @@ import com.universalpos.service.ReceiptService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.NonNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +45,7 @@ public class ReceiptController {
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"receipt-" + txnId + ".pdf\"")
-                .contentType(MediaType.APPLICATION_PDF)
+                .contentType(MediaType.APPLICATION_PDF != null ? MediaType.APPLICATION_PDF : MediaType.APPLICATION_OCTET_STREAM)
                 .body(pdf);
     }
 }

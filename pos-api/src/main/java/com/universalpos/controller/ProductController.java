@@ -11,11 +11,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.http.*;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @RestController
@@ -30,7 +30,7 @@ public class ProductController {
     @GetMapping("/search")
     @Operation(summary = "Search products by name, SKU, barcode, or brand")
     public ResponseEntity<ApiResponse<Page<Product>>> search(
-            @AuthenticationPrincipal PosUserPrincipal principal,
+            @AuthenticationPrincipal @NonNull PosUserPrincipal principal,
             @RequestParam String q,
             @RequestParam(defaultValue = "0")  int page,
             @RequestParam(defaultValue = "20") int size) {
@@ -43,7 +43,7 @@ public class ProductController {
     @GetMapping("/barcode/{barcode}")
     @Operation(summary = "Look up a product by barcode (scanner input)")
     public ResponseEntity<ApiResponse<Product>> getByBarcode(
-            @AuthenticationPrincipal PosUserPrincipal principal,
+            @AuthenticationPrincipal @NonNull PosUserPrincipal principal,
             @PathVariable String barcode) {
 
         Product product = productRepository
@@ -55,7 +55,7 @@ public class ProductController {
     @GetMapping("/{id}")
     @Operation(summary = "Get product by ID")
     public ResponseEntity<ApiResponse<Product>> getById(
-            @AuthenticationPrincipal PosUserPrincipal principal,
+            @AuthenticationPrincipal @NonNull PosUserPrincipal principal,
             @PathVariable Long id) {
 
         Product product = productRepository.findById(id)
@@ -69,7 +69,7 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @Operation(summary = "Create a new product (Manager+ only)")
     public ResponseEntity<ApiResponse<Product>> create(
-            @AuthenticationPrincipal PosUserPrincipal principal,
+            @AuthenticationPrincipal @NonNull PosUserPrincipal principal,
             @RequestBody Product productRequest) {
 
         var tenant = tenantRepository.findById(principal.getTenantId())
@@ -86,7 +86,7 @@ public class ProductController {
     @PreAuthorize("hasAnyRole('MANAGER', 'ADMIN')")
     @Operation(summary = "Update a product (Manager+ only)")
     public ResponseEntity<ApiResponse<Product>> update(
-            @AuthenticationPrincipal PosUserPrincipal principal,
+            @AuthenticationPrincipal @NonNull PosUserPrincipal principal,
             @PathVariable Long id,
             @RequestBody Product updates) {
 
@@ -94,7 +94,6 @@ public class ProductController {
                 .filter(p -> p.getTenant().getTenantId().equals(principal.getTenantId()))
                 .orElseThrow(() -> new ResourceNotFoundException("Product", id));
 
-        // Apply updates — only non-null fields
         Optional.ofNullable(updates.getName()).ifPresent(existing::setName);
         Optional.ofNullable(updates.getDescription()).ifPresent(existing::setDescription);
         Optional.ofNullable(updates.getPrice()).ifPresent(existing::setPrice);

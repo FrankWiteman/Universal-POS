@@ -32,8 +32,8 @@ Any company can deploy this, configure it for their brand, and run a full store 
 
 | Layer | Technology |
 |---|---|
-| Language | Java 21 (LTS) |
-| Framework | Spring Boot 3.2 |
+| Language | Java 21 LTS |
+| Framework | Spring Boot 3.4.4 |
 | Database | Oracle 21c |
 | ORM | Hibernate 6 / Spring Data JPA |
 | Migrations | Flyway 10 |
@@ -43,6 +43,14 @@ Any company can deploy this, configure it for their brand, and run a full store 
 | Email | Jakarta Mail + Thymeleaf |
 | Build | Maven (multi-module) |
 | Containers | Docker + Docker Compose |
+
+---
+
+## ⚠️ Java Version Requirement
+
+**Use Java 21 LTS exactly.** Java 22, 23, 24, and 25 all break Lombok due to internal compiler changes in newer JDKs. Java 21 is supported until 2031 and is the standard for enterprise Java.
+
+Download: https://adoptium.net/temurin/releases/?version=21
 
 ---
 
@@ -62,7 +70,7 @@ JavaFX Terminal  →  Spring Boot REST API  →  Oracle Database
 
 ## 🚀 Quick Start
 
-**Prerequisites:** Java 21, Maven 3.9+, Docker Desktop (4 GB RAM minimum)
+**Prerequisites:** Java 21 LTS, Maven 3.9+, Docker Desktop (4 GB RAM minimum)
 
 ```bash
 # 1. Start Oracle database + MailHog (local email catcher)
@@ -79,9 +87,9 @@ cd .. && mvn clean install -DskipTests
 cd pos-api && mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-Server starts at `http://localhost:8080/api`
+Server: `http://localhost:8080/api`
 
-**Swagger UI (interactive API docs):** `http://localhost:8080/api/swagger-ui.html`
+Swagger UI: `http://localhost:8080/api/swagger-ui.html`
 
 **Test login:**
 ```bash
@@ -100,7 +108,7 @@ universal-pos/
 ├── pos-terminal/     JavaFX desktop register UI (Phase 4)
 ├── docker/           Docker Compose + Oracle init scripts
 ├── PROJECT.md        Full architecture, schema, and decision log
-└── README.md         Setup guide
+└── README.md         This file
 ```
 
 ---

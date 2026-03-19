@@ -1,6 +1,5 @@
 package com.universalpos.repository;
 
-import com.universalpos.domain.Customer.LoyaltyTier;
 import com.universalpos.domain.Discount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

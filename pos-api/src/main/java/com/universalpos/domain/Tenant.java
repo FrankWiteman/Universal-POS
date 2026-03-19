@@ -3,6 +3,8 @@ package com.universalpos.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -50,6 +52,7 @@ public class Tenant {
 
     /** Tax rate as a decimal, e.g. 0.0825 = 8.25% */
     @Column(name = "TAX_RATE", nullable = false)
+    @JdbcTypeCode(SqlTypes.NUMERIC)
     @Builder.Default
     private Double taxRate = 0.0825;
 
