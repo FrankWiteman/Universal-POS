@@ -32,7 +32,11 @@ Any company can deploy this, configure it for their brand, and run a full store 
 | Low stock alerts | ✅ |
 | Manual stock adjustments (damage, theft, correction) | ✅ |
 | Physical stock count sessions with variance tracking | ✅ |
-| Returns & exchanges | 🔜 Phase 2 |
+| Full return processing (partial + full) | ✅ |
+| Return reason codes (configurable per store) | ✅ |
+| Exchange workflow (return + new items, net billing) | ✅ |
+| Inventory auto-restocked on return | ✅ |
+| Loyalty points reversed on return | ✅ |
 | Manager reporting dashboard | 🔜 Phase 3 |
 | JavaFX register terminal UI | 🔜 Phase 4 |
 
@@ -125,6 +129,9 @@ universal-pos/
 | Inventory | `GET /inventory/low-stock` | Reorder alerts |
 | Inventory | `POST /inventory/purchase-orders` | Create PO |
 | Inventory | `POST /inventory/stock-counts/start` | Count session |
+| Returns | `GET /returns/reasons` | List return reason codes |
+| Returns | `POST /returns` | Process a return (refund) |
+| Returns | `POST /returns/exchange` | Process an exchange |
 
 Full interactive docs at `/api/swagger-ui.html`
 
@@ -133,6 +140,7 @@ Full interactive docs at `/api/swagger-ui.html`
 ## 🗺️ Roadmap
 
 - [x] Phase 1 — Full backend: auth, customers, products, discounts, transactions, receipts, inventory
+- [x] Phase 2 — Returns & exchanges (partial returns, exchanges, reason codes, restock, loyalty reversal)
 - [ ] Phase 2 — Returns & exchanges
 - [ ] Phase 3 — Reporting dashboard + admin tools
 - [ ] Phase 4 — JavaFX register terminal UI

@@ -12,8 +12,7 @@ VALUES (TENANT_SEQ.NEXTVAL, 'UniversalPOS Demo Store', 'demo-store', '#1A1A2E',
         0.0825, 'USD', 'America/Chicago');
 
 -- Default Admin Employee
--- Password: ChangeMe123!  (BCrypt hash below)
--- CHANGE THIS IMMEDIATELY after first login
+-- Password: ChangeMe123!  (BCrypt hash below — corrected by V4 migration)
 INSERT INTO EMPLOYEES (EMPLOYEE_ID, TENANT_ID, FIRST_NAME, LAST_NAME,
                         EMAIL, PASSWORD_HASH, ROLE, EMPLOYEE_NUMBER)
 VALUES (EMPLOYEE_SEQ.NEXTVAL,

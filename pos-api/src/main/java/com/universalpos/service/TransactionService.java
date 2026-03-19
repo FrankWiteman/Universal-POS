@@ -32,6 +32,14 @@ public class TransactionService {
     private final CustomerService       customerService;
     private final AuditService          auditService;
 
+    @Transactional(readOnly = true)
+    public TransactionResponse getById(Long txnId, Long tenantId) {
+        Transaction t = transactionRepository.findById(txnId)
+                .filter(tx -> tx.getTenant().getTenantId().equals(tenantId))
+                .orElseThrow(() -> new com.universalpos.exception.ResourceNotFoundException("Transaction", txnId));
+        return toResponse(t);
+    }
+
     /**
      * Process and complete a sale transaction.
      *
