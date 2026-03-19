@@ -8,6 +8,7 @@
 # README.md         → goes to GitHub (the short public version)
 # README-personal.md → stays LOCAL ONLY (your full working doc)
 README-personal.md
+token.txt
 README.md
 
 # ── Architecture docs ──────────────────────────────────
