@@ -6,6 +6,7 @@
 
 ---
 
+<<<<<<< HEAD
 ## 📄 About These Docs — Three Files, Each With a Job
 
 This project uses three documentation files. Here is what each one is for and who sees it:
@@ -31,6 +32,53 @@ That's it. Three files, three levels of detail, only one goes to GitHub.
 ---
 
 ## 📖 What Is This? (Plain English)
+=======
+## ✨ Features — Phase 1 Complete
+
+| Feature | Status |
+|---|---|
+| Employee login + JWT auth | ✅ |
+| Multi-store / multi-tenant isolation | ✅ |
+| Tenant configuration API | ✅ |
+| Employee management (create, update, password change) | ✅ |
+| Customer lookup (phone, email, loyalty card, name) | ✅ |
+| Loyalty tier system (Bronze → Silver → Gold → Platinum) | ✅ |
+| Discount Engine (percent, fixed, tier-based, coupon codes) | ✅ |
+| Discount rule management API | ✅ |
+| Product catalog (create, update, search, barcode lookup) | ✅ |
+| Full sales transaction processing | ✅ |
+| Cash change calculation | ✅ |
+| Transaction void (Manager+) | ✅ |
+| Transaction lookup by ID | ✅ |
+| PDF receipt generation | ✅ |
+| Email receipt (branded HTML) | ✅ |
+| Async audit trail | ✅ |
+| Supplier management | ✅ |
+| Purchase orders (create, submit, receive) | ✅ |
+| Partial PO receipt support | ✅ |
+| Low stock alerts | ✅ |
+| Manual stock adjustments (damage, theft, correction) | ✅ |
+| Physical stock count sessions with variance tracking | ✅ |
+| Full return processing (partial + full) | ✅ |
+| Return reason codes (configurable per store) | ✅ |
+| Exchange workflow (return + new items, net billing) | ✅ |
+| Inventory auto-restocked on return | ✅ |
+| Loyalty points reversed on return | ✅ |
+| Manager reporting dashboard | 🔜 Phase 3 |
+| JavaFX register terminal UI | 🔜 Phase 4 |
+
+---
+
+## ⚠️ Java Version Requirement
+
+**Use Java 21 LTS exactly.** Java 22, 23, 24, and 25 all break Lombok due to internal compiler changes. Java 21 is supported until 2031.
+
+Download: https://adoptium.net/temurin/releases/?version=21
+
+---
+
+## 🧰 Tech Stack
+>>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 
 Think of this project as building the software that runs a cash register — but a really powerful one, the kind you'd find at Guitar Center, Best Buy, or a clothing chain.
 
@@ -50,6 +98,7 @@ This project builds all of that, in Java, using the same technologies that real 
 
 ---
 
+<<<<<<< HEAD
 ## ✨ What's Built So Far (Phase 1 Complete)
 
 | Feature | Done? | What it means in plain English |
@@ -904,6 +953,34 @@ curl -X POST http://localhost:8080/api/receipts/1/email \
 curl -H "Authorization: Bearer TOKEN" \
   "http://localhost:8080/api/receipts/1/pdf" \
   --output receipt.pdf
+=======
+## 🚀 Quick Start
+
+**Prerequisites:** Java 21 LTS, Maven 3.9+, Docker Desktop (4 GB RAM)
+
+```bash
+# 1. Start Oracle + MailHog
+cd docker && docker-compose up -d
+docker logs -f universalpos-oracle   # wait for: DATABASE IS READY TO USE!
+
+# 2. Build and run
+cd .. && mvn clean install -DskipTests
+cd pos-api && mvn spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+Swagger UI: `http://localhost:8080/api/swagger-ui.html`
+
+**Quick login (saves token to $TOKEN / %TOKEN%):**
+```bash
+# Mac/Linux
+source scripts/login.sh
+
+# Windows
+scripts\login.bat
+
+# Then use the token:
+curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/api/customers/search?q=Jane
+>>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 ```
 
 ---
@@ -920,8 +997,18 @@ cd pos-api
 # (These don't need the database — they run entirely in memory)
 mvn test
 ```
+<<<<<<< HEAD
 
 You'll see output like:
+=======
+universal-pos/
+├── pos-api/          Spring Boot REST API
+├── pos-terminal/     JavaFX register UI (Phase 4)
+├── docker/           Docker Compose + Oracle init
+├── scripts/          login.sh / login.bat — JWT token helpers
+├── PROJECT.md        Full architecture and decision log
+└── README.md         This file
+>>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 ```
 [INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0
 [INFO] BUILD SUCCESS
@@ -952,6 +1039,7 @@ pos-api/target/site/jacoco/index.html
 
 ## 📡 API Endpoints Reference
 
+<<<<<<< HEAD
 **Base URL:** `http://localhost:8080/api`
 
 All endpoints except `/auth/login` require: `Authorization: Bearer YOUR_TOKEN`
@@ -1066,11 +1154,34 @@ All report endpoints default to today (daily) or last 30 days if no dates provid
 | **ADMIN** | Everything a manager can + manage employees, configure store settings, view audit logs |
 
 The system enforces these automatically. If a cashier tries to void a transaction, they get a `403 Forbidden` error.
+=======
+| Area | Endpoint | Notes |
+|---|---|---|
+| Auth | `POST /auth/login` | Returns JWT token |
+| Tenants | `GET/PUT /tenants/current` | View/update store config |
+| Employees | `GET/POST /employees` | Staff management (Admin) |
+| Customers | `GET /customers/search` | Search + loyalty info |
+| Products | `GET /products/search` | + barcode lookup |
+| Discounts | `GET/POST /discounts` | Rule management |
+| Transactions | `POST /transactions` | Process a sale |
+| Transactions | `POST /transactions/{id}/void` | Manager+ |
+| Receipts | `POST /receipts/{id}/email` | Email receipt |
+| Receipts | `GET /receipts/{id}/pdf` | Download PDF |
+| Inventory | `GET /inventory/low-stock` | Reorder alerts |
+| Inventory | `POST /inventory/purchase-orders` | Create PO |
+| Inventory | `POST /inventory/stock-counts/start` | Count session |
+| Returns | `GET /returns/reasons` | List return reason codes |
+| Returns | `POST /returns` | Process a return (refund) |
+| Returns | `POST /returns/exchange` | Process an exchange |
+
+Full interactive docs at `/api/swagger-ui.html`
+>>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 
 ---
 
 ## 🛠️ Troubleshooting — Plain English Fixes
 
+<<<<<<< HEAD
 ### "docker-compose: command not found"
 Docker Compose is now built into Docker Desktop as `docker compose` (no hyphen).
 Try: `docker compose up -d` instead of `docker-compose up -d`
@@ -1493,6 +1604,14 @@ Project structure created. Tech stack selected. Architecture designed. Database 
 - [ ] Future: Physical barcode scanner integration
 - [ ] Future: Credit card terminal (Stripe Terminal or PAX device SDK)
 - [ ] Future: Offline mode (keeps working if the network drops)
+=======
+- [x] Phase 1 — Full backend: auth, customers, products, discounts, transactions, receipts, inventory
+- [x] Phase 2 — Returns & exchanges (partial returns, exchanges, reason codes, restock, loyalty reversal)
+- [ ] Phase 2 — Returns & exchanges
+- [ ] Phase 3 — Reporting dashboard + admin tools
+- [ ] Phase 4 — JavaFX register terminal UI
+- [ ] Phase 5 — Integration tests + production hardening
+>>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 
 ---
 
