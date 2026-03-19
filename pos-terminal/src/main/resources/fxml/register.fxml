@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<!--
+  Main register screen — the primary cashier interface.
+  
+  Layout: BorderPane divides the screen into 5 zones:
+    top    → header bar (employee info, customer lookup, status)
+    left   → product search panel
+    center → cart (the items being purchased)
+    right  → totals and action buttons
+    bottom → status bar
+-->
+<BorderPane prefHeight="720.0" prefWidth="1280.0"
+    styleClass="root-dark"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.universalpos.terminal.controller.RegisterController">
+
+    <!-- ── TOP: Header bar ──────────────────────────────────── -->
+    <top>
+        <HBox styleClass="header-bar" spacing="16" alignment="CENTER_LEFT">
+            <padding><Insets topRightBottomLeft="12"/></padding>
+
+            <Label text="🏪 UniversalPOS" styleClass="header-logo"/>
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Customer lookup -->
+            <HBox spacing="8" alignment="CENTER">
+                <TextField fx:id="customerSearchField"
+                           promptText="Search customer (name, phone, email)..."
+                           prefWidth="280" styleClass="form-input"/>
+                <Button text="🔍" onAction="#handleCustomerSearch"
+                        styleClass="icon-button"/>
+                <Button text="✕" onAction="#handleClearCustomer"
+                        styleClass="icon-button-danger" fx:id="clearCustomerBtn"
+                        visible="false" managed="false"/>
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <!-- Logged-in employee -->
+            <VBox alignment="CENTER_RIGHT" spacing="2">
+                <Label fx:id="employeeLabel" text="Loading..." styleClass="header-employee"/>
+                <Label fx:id="roleLabel" text="" styleClass="header-role"/>
+            </VBox>
+
+            <Button text="⏻ Logout" onAction="#handleLogout"
+                    styleClass="logout-button"/>
+        </HBox>
+    </top>
+
+    <!-- ── LEFT: Product search panel ──────────────────────── -->
+    <left>
+        <VBox styleClass="panel-dark" spacing="12" prefWidth="340">
+            <padding><Insets topRightBottomLeft="16"/></padding>
+
+            <Label text="Add Items" styleClass="panel-title"/>
+
+            <!-- Barcode / text search -->
+            <HBox spacing="8">
+                <TextField fx:id="productSearchField"
+                           promptText="Search or scan barcode..."
+                           HBox.hgrow="ALWAYS" styleClass="form-input"
+                           onAction="#handleProductSearch"/>
+                <Button text="Add" onAction="#handleProductSearch"
+                        styleClass="primary-button"/>
+            </HBox>
+
+            <!-- Search results list -->
+            <ListView fx:id="productListView" VBox.vgrow="ALWAYS"
+                      styleClass="product-list" prefHeight="500"
+                      onMouseClicked="#handleProductSelected"/>
+
+            <!-- Customer info panel — shows when customer is attached -->
+            <VBox fx:id="customerPanel" styleClass="customer-panel"
+                  visible="false" managed="false" spacing="4">
+                <Label text="👤 Customer" styleClass="panel-subtitle"/>
+                <Label fx:id="customerNameLabel" text="" styleClass="customer-name"/>
+                <Label fx:id="customerInfoLabel" text="" styleClass="customer-info"/>
+            </VBox>
+        </VBox>
+    </left>
+
+    <!-- ── CENTER: Cart ─────────────────────────────────────── -->
+    <center>
+        <VBox styleClass="cart-panel" spacing="0">
+            <padding><Insets top="16" right="8" bottom="16" left="8"/></padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="12">
+                <Label text="Cart" styleClass="panel-title"/>
+                <Label fx:id="itemCountLabel" text="(0 items)"
+                       styleClass="item-count-label"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="🗑 Clear Cart" onAction="#handleClearCart"
+                        styleClass="danger-button-small"/>
+            </HBox>
+
+            <!-- Cart table -->
+            <TableView fx:id="cartTable" VBox.vgrow="ALWAYS"
+                       styleClass="cart-table" editable="false">
+                <columns>
+                    <TableColumn fx:id="colProduct" text="Product" prefWidth="220"
+                                 style="-fx-alignment: CENTER-LEFT;"/>
+                    <TableColumn fx:id="colQty" text="Qty" prefWidth="60"
+                                 style="-fx-alignment: CENTER;"/>
+                    <TableColumn fx:id="colPrice" text="Unit Price" prefWidth="90"
+                                 style="-fx-alignment: CENTER-RIGHT;"/>
+                    <TableColumn fx:id="colTotal" text="Line Total" prefWidth="100"
+                                 style="-fx-alignment: CENTER-RIGHT;"/>
+                    <TableColumn fx:id="colRemove" text="" prefWidth="50"
+                                 style="-fx-alignment: CENTER;"/>
+                </columns>
+                <placeholder>
+                    <Label text="Cart is empty — search for products to add them"
+                           styleClass="placeholder-label"/>
+                </placeholder>
+            </TableView>
+        </VBox>
+    </center>
+
+    <!-- ── RIGHT: Totals and actions ────────────────────────── -->
+    <right>
+        <VBox styleClass="totals-panel" spacing="16" prefWidth="260">
+            <padding><Insets topRightBottomLeft="20"/></padding>
+
+            <Label text="Order Total" styleClass="panel-title"/>
+
+            <!-- Totals breakdown -->
+            <GridPane hgap="8" vgap="10">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                    <ColumnConstraints minWidth="80" style="-fx-alignment: CENTER-RIGHT;"/>
+                </columnConstraints>
+
+                <Label text="Subtotal" styleClass="total-label"
+                       GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <Label fx:id="subtotalLabel" text="$0.00" styleClass="total-value"
+                       GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="Discount" styleClass="total-label total-discount"
+                       GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <Label fx:id="discountLabel" text="-$0.00"
+                       styleClass="total-value total-discount"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="Tax" styleClass="total-label"
+                       GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label fx:id="taxLabel" text="$0.00" styleClass="total-value"
+                       GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Separator GridPane.rowIndex="3" GridPane.columnSpan="2"/>
+
+                <Label text="TOTAL" styleClass="grand-total-label"
+                       GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <Label fx:id="totalLabel" text="$0.00" styleClass="grand-total-value"
+                       GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <!-- Status / error message -->
+            <Label fx:id="statusLabel" text="" styleClass="status-label"
+                   wrapText="true" visible="false" managed="false"/>
+
+            <!-- Action buttons -->
+            <Button text="💳 Checkout" fx:id="checkoutButton"
+                    maxWidth="Infinity" prefHeight="52"
+                    styleClass="checkout-button"
+                    onAction="#handleCheckout"
+                    disable="true"/>
+
+            <Button text="↩ Return / Exchange" maxWidth="Infinity"
+                    styleClass="secondary-button"
+                    onAction="#handleOpenReturn"/>
+
+            <Button text="⊘ Void Transaction" maxWidth="Infinity"
+                    styleClass="danger-button"
+                    onAction="#handleVoid"
+                    fx:id="voidButton" visible="false" managed="false"/>
+        </VBox>
+    </right>
+
+    <!-- ── BOTTOM: Status bar ───────────────────────────────── -->
+    <bottom>
+        <HBox styleClass="status-bar" spacing="16" alignment="CENTER_LEFT">
+            <padding><Insets top="6" right="16" bottom="6" left="16"/></padding>
+            <Label fx:id="statusBarLabel" text="Ready" styleClass="status-bar-text"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="txnLabel" text="" styleClass="status-bar-txn"/>
+        </HBox>
+    </bottom>
+</BorderPane>

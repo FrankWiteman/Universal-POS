@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" alignment="CENTER" styleClass="root-dark"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.universalpos.terminal.controller.ManagerPinController">
+    <padding><Insets topRightBottomLeft="32"/></padding>
+
+    <Label text="🔐 Manager Verification" styleClass="panel-title"/>
+    <Label text="Enter manager credentials to continue."
+           styleClass="subtitle-label" wrapText="true"/>
+
+    <GridPane hgap="12" vgap="14">
+        <columnConstraints>
+            <ColumnConstraints minWidth="90"/>
+            <ColumnConstraints hgrow="ALWAYS" minWidth="180"/>
+        </columnConstraints>
+        <Label text="Email" GridPane.rowIndex="0" GridPane.columnIndex="0" styleClass="form-label"/>
+        <TextField fx:id="emailField" promptText="manager@email.com"
+                   GridPane.rowIndex="0" GridPane.columnIndex="1" styleClass="form-input"/>
+
+        <Label text="Password" GridPane.rowIndex="1" GridPane.columnIndex="0" styleClass="form-label"/>
+        <PasswordField fx:id="passwordField"
+                       GridPane.rowIndex="1" GridPane.columnIndex="1" styleClass="form-input"/>
+    </GridPane>
+
+    <Label fx:id="errorLabel" text="" styleClass="error-label"
+           visible="false" managed="false" wrapText="true"/>
+
+    <HBox spacing="12">
+        <Button text="Cancel" onAction="#handleCancel" HBox.hgrow="ALWAYS"
+                maxWidth="Infinity" styleClass="secondary-button"/>
+        <Button fx:id="verifyButton" text="Verify" onAction="#handleVerify"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity" styleClass="primary-button"/>
+    </HBox>
+</VBox>

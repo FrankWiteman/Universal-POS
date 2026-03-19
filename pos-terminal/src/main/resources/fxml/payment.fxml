@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox spacing="20" styleClass="root-dark"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.universalpos.terminal.controller.PaymentController">
+    <padding><Insets topRightBottomLeft="28"/></padding>
+
+    <Label text="Payment" styleClass="panel-title"/>
+
+    <!-- Order summary -->
+    <VBox styleClass="summary-card" spacing="10">
+        <padding><Insets topRightBottomLeft="16"/></padding>
+        <HBox><Label text="Subtotal" HBox.hgrow="ALWAYS"/>
+              <Label fx:id="summarySubtotal" text="$0.00" styleClass="total-value"/></HBox>
+        <HBox><Label text="Discount" HBox.hgrow="ALWAYS" styleClass="total-discount"/>
+              <Label fx:id="summaryDiscount" text="-$0.00" styleClass="total-discount"/></HBox>
+        <HBox><Label text="Tax" HBox.hgrow="ALWAYS"/>
+              <Label fx:id="summaryTax" text="$0.00" styleClass="total-value"/></HBox>
+        <Separator/>
+        <HBox><Label text="TOTAL" styleClass="grand-total-label" HBox.hgrow="ALWAYS"/>
+              <Label fx:id="summaryTotal" text="$0.00" styleClass="grand-total-value"/></HBox>
+    </VBox>
+
+    <!-- Payment method -->
+    <Label text="Payment Method" styleClass="form-label"/>
+    <HBox spacing="10">
+        <ToggleButton fx:id="btnCash"     text="💵 Cash"        toggleGroup="$paymentGroup" styleClass="payment-toggle" selected="true"/>
+        <ToggleButton fx:id="btnCredit"   text="💳 Credit Card" toggleGroup="$paymentGroup" styleClass="payment-toggle"/>
+        <ToggleButton fx:id="btnDebit"    text="💳 Debit Card"  toggleGroup="$paymentGroup" styleClass="payment-toggle"/>
+        <ToggleButton fx:id="btnGiftCard" text="🎁 Gift Card"   toggleGroup="$paymentGroup" styleClass="payment-toggle"/>
+        <ToggleGroup fx:id="paymentGroup"/>
+    </HBox>
+
+    <!-- Cash tendered (visible for cash only) -->
+    <VBox fx:id="cashPanel" spacing="8">
+        <Label text="Amount Tendered" styleClass="form-label"/>
+        <HBox spacing="8" alignment="CENTER_LEFT">
+            <Label text="$" styleClass="currency-prefix"/>
+            <TextField fx:id="tenderedField" promptText="0.00" prefWidth="140"
+                       styleClass="form-input money-input"/>
+            <Label fx:id="changeLabel" text="Change: $0.00" styleClass="change-label"/>
+        </HBox>
+    </VBox>
+
+    <Label fx:id="errorLabel" text="" styleClass="error-label"
+           visible="false" managed="false" wrapText="true"/>
+
+    <Region VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="12">
+        <Button text="Cancel" onAction="#handleCancel" HBox.hgrow="ALWAYS"
+                maxWidth="Infinity" styleClass="secondary-button"/>
+        <Button fx:id="chargeButton" text="✓ Charge" onAction="#handleCharge"
+                HBox.hgrow="ALWAYS" maxWidth="Infinity"
+                styleClass="checkout-button" prefHeight="48"/>
+    </HBox>
+
+    <ProgressIndicator fx:id="loadingIndicator" visible="false" managed="false"
+                       maxWidth="32" maxHeight="32" VBox.vgrow="NEVER"/>
+</VBox>

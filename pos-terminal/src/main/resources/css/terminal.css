@@ -1,0 +1,164 @@
+/* ============================================================
+   UniversalPOS Terminal — Dark Theme Stylesheet
+   Applied to all screens via scene.getStylesheets().add(...)
+   ============================================================ */
+
+/* ── Root / background ─────────────────────────────────────── */
+.root-dark { -fx-background-color: #1a1a2e; }
+
+/* ── Typography ─────────────────────────────────────────────── */
+.title-label     { -fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #e0e0ff; }
+.subtitle-label  { -fx-font-size: 14px; -fx-text-fill: #8888aa; }
+.card-title      { -fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #e0e0ff; }
+.panel-title     { -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #c0c0e0; }
+.panel-subtitle  { -fx-font-size: 13px; -fx-text-fill: #8888aa; }
+.footer-label    { -fx-font-size: 11px; -fx-text-fill: #555577; }
+.form-label      { -fx-text-fill: #a0a0c0; -fx-font-size: 13px; }
+.error-label     { -fx-text-fill: #ff6b6b; -fx-font-size: 13px; }
+.success-label   { -fx-text-fill: #51cf66; -fx-font-size: 13px; }
+.placeholder-label { -fx-text-fill: #555577; }
+
+/* ── Inputs ─────────────────────────────────────────────────── */
+.form-input {
+    -fx-background-color: #2a2a4a;
+    -fx-text-fill: #e0e0ff;
+    -fx-prompt-text-fill: #555577;
+    -fx-border-color: #3a3a6a;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-padding: 8 12 8 12;
+    -fx-font-size: 13px;
+}
+.form-input:focused {
+    -fx-border-color: #6c63ff;
+    -fx-background-color: #2e2e52;
+}
+.money-input { -fx-font-size: 18px; -fx-font-weight: bold; }
+.currency-prefix { -fx-text-fill: #8888aa; -fx-font-size: 16px; }
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.primary-button {
+    -fx-background-color: #6c63ff;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20 10 20;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.primary-button:hover    { -fx-background-color: #7c73ff; }
+.primary-button:disabled { -fx-background-color: #3a3a6a; -fx-text-fill: #555577; }
+
+.checkout-button {
+    -fx-background-color: #51cf66;
+    -fx-text-fill: #1a1a2e;
+    -fx-font-weight: bold;
+    -fx-font-size: 15px;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.checkout-button:hover    { -fx-background-color: #62da77; }
+.checkout-button:disabled { -fx-background-color: #2a4a2a; -fx-text-fill: #555577; }
+
+.secondary-button {
+    -fx-background-color: #2a2a4a;
+    -fx-text-fill: #a0a0c0;
+    -fx-border-color: #3a3a6a;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.secondary-button:hover { -fx-background-color: #3a3a5a; }
+
+.danger-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ff6b6b;
+    -fx-border-color: #ff6b6b;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+}
+.danger-button:hover { -fx-background-color: #3a1a1a; }
+
+.danger-button-small {
+    -fx-background-color: transparent;
+    -fx-text-fill: #ff6b6b;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+    -fx-padding: 4 8 4 8;
+}
+
+.logout-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #8888aa;
+    -fx-border-color: #3a3a5a;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+.logout-button:hover { -fx-text-fill: #ff6b6b; -fx-border-color: #ff6b6b; }
+
+.icon-button { -fx-background-color: #2a2a4a; -fx-text-fill: #a0a0c0; -fx-cursor: hand; }
+.icon-button-danger { -fx-background-color: transparent; -fx-text-fill: #ff6b6b; -fx-cursor: hand; }
+.remove-button { -fx-background-color: transparent; -fx-text-fill: #ff6b6b; -fx-font-size:14px; -fx-cursor:hand; }
+
+/* ── Payment toggles ─────────────────────────────────────────── */
+.payment-toggle {
+    -fx-background-color: #2a2a4a;
+    -fx-text-fill: #a0a0c0;
+    -fx-border-color: #3a3a6a;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 10 14 10 14;
+}
+.payment-toggle:selected {
+    -fx-background-color: #6c63ff;
+    -fx-text-fill: white;
+    -fx-border-color: #6c63ff;
+}
+
+/* ── Panels / cards ──────────────────────────────────────────── */
+.panel-dark     { -fx-background-color: #14142a; }
+.cart-panel     { -fx-background-color: #1a1a2e; }
+.totals-panel   { -fx-background-color: #14142a; }
+.header-bar     { -fx-background-color: #12122a; -fx-border-color: #2a2a4a; -fx-border-width: 0 0 1 0; }
+.status-bar     { -fx-background-color: #0e0e1e; }
+.login-card     { -fx-background-color: #22224a; -fx-background-radius: 10; }
+.summary-card   { -fx-background-color: #22224a; -fx-background-radius: 8; }
+.customer-panel { -fx-background-color: #1a2a3a; -fx-border-color: #2a4a6a; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 10; }
+
+/* ── Header labels ───────────────────────────────────────────── */
+.header-logo     { -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #e0e0ff; }
+.header-employee { -fx-text-fill: #c0c0e0; -fx-font-size: 13px; -fx-font-weight: bold; }
+.header-role     { -fx-text-fill: #6c63ff; -fx-font-size: 11px; }
+
+/* ── Totals ──────────────────────────────────────────────────── */
+.total-label        { -fx-text-fill: #a0a0c0; -fx-font-size: 13px; }
+.total-value        { -fx-text-fill: #e0e0ff; -fx-font-size: 13px; -fx-font-weight: bold; }
+.total-discount     { -fx-text-fill: #51cf66; }
+.grand-total-label  { -fx-text-fill: #e0e0ff; -fx-font-size: 16px; -fx-font-weight: bold; }
+.grand-total-value  { -fx-text-fill: #51cf66; -fx-font-size: 20px; -fx-font-weight: bold; }
+.change-label       { -fx-text-fill: #51cf66; -fx-font-size: 15px; -fx-font-weight: bold; }
+.change-negative    { -fx-text-fill: #ff6b6b; }
+.item-count-label   { -fx-text-fill: #8888aa; -fx-font-size: 12px; }
+
+/* ── Tables ──────────────────────────────────────────────────── */
+.cart-table               { -fx-background-color: #1a1a2e; }
+.cart-table .column-header-background { -fx-background-color: #12122a; }
+.cart-table .column-header .label { -fx-text-fill: #8888aa; -fx-font-size: 12px; }
+.cart-table .table-row-cell { -fx-background-color: #1a1a2e; -fx-border-color: #2a2a4a; -fx-border-width: 0 0 1 0; }
+.cart-table .table-row-cell:selected { -fx-background-color: #2a2a5a; }
+.cart-table .table-row-cell .text { -fx-fill: #c0c0e0; -fx-font-size: 13px; }
+.product-list .list-cell  { -fx-background-color: #1a1a2e; -fx-text-fill: #c0c0e0; -fx-font-size: 12px; -fx-padding: 8 12 8 12; -fx-border-color: #2a2a4a; -fx-border-width: 0 0 1 0; }
+.product-list .list-cell:hover    { -fx-background-color: #2a2a4a; }
+.product-list .list-cell:selected { -fx-background-color: #2a2a5a; }
+
+/* ── Status bar ──────────────────────────────────────────────── */
+.status-bar-text { -fx-text-fill: #8888aa; -fx-font-size: 12px; }
+.status-bar-txn  { -fx-text-fill: #6c63ff; -fx-font-size: 12px; }
+.status-label    { -fx-text-fill: #ff6b6b; -fx-font-size: 12px; }
+
+/* ── Customer panel ──────────────────────────────────────────── */
+.customer-name { -fx-text-fill: #e0e0ff; -fx-font-weight: bold; -fx-font-size: 13px; }
+.customer-info { -fx-text-fill: #8888aa; -fx-font-size: 12px; }

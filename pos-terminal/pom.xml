@@ -44,6 +44,13 @@
             <version>2.16.1</version>
         </dependency>
 
+        <!-- Jackson Java 8 date/time support -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.16.1</version>
+        </dependency>
+
         <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -62,6 +69,10 @@
                 <version>0.0.8</version>
                 <configuration>
                     <mainClass>com.universalpos.terminal.MainApp</mainClass>
+                    <!-- Compile before run so all classes are up to date -->
+                    <options>
+                        <option>--add-opens=javafx.fxml/javafx.fxml=ALL-UNNAMED</option>
+                    </options>
                 </configuration>
             </plugin>
             <plugin>

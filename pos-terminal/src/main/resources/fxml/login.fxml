@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<!--
+  Login screen layout.
+  
+  fx:controller links this FXML file to LoginController.java —
+  JavaFX will automatically create the controller and wire up
+  all the @FXML-annotated fields by matching their fx:id values.
+  
+  AnchorPane: a layout where children are positioned relative to edges.
+  VBox: stacks children vertically.
+  GridPane: a row/column grid — used for the form fields.
+-->
+<AnchorPane prefHeight="720.0" prefWidth="1280.0"
+    styleClass="root-dark"
+    xmlns="http://javafx.com/javafx/21"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.universalpos.terminal.controller.LoginController">
+
+    <!-- Centered login card -->
+    <VBox alignment="CENTER" spacing="32"
+          AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0"
+          AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0">
+
+        <!-- Logo / Title -->
+        <VBox alignment="CENTER" spacing="8">
+            <Label text="🏪" style="-fx-font-size: 48px;"/>
+            <Label text="UniversalPOS" styleClass="title-label"/>
+            <Label text="Point of Sale Terminal" styleClass="subtitle-label"/>
+        </VBox>
+
+        <!-- Login Card -->
+        <VBox styleClass="login-card" spacing="20" maxWidth="400">
+            <padding><Insets topRightBottomLeft="32"/></padding>
+
+            <Label text="Sign In" styleClass="card-title"/>
+
+            <!-- Error message — hidden until there's an error -->
+            <Label fx:id="errorLabel" text="" styleClass="error-label"
+                   wrapText="true" managed="false" visible="false"/>
+
+            <!-- Form fields -->
+            <GridPane hgap="12" vgap="16">
+                <columnConstraints>
+                    <ColumnConstraints minWidth="100" prefWidth="120"/>
+                    <ColumnConstraints hgrow="ALWAYS"/>
+                </columnConstraints>
+
+                <Label text="Email" GridPane.rowIndex="0" GridPane.columnIndex="0"
+                       styleClass="form-label"/>
+                <TextField fx:id="emailField" promptText="your@email.com"
+                           GridPane.rowIndex="0" GridPane.columnIndex="1"
+                           styleClass="form-input"/>
+
+                <Label text="Password" GridPane.rowIndex="1" GridPane.columnIndex="0"
+                       styleClass="form-label"/>
+                <PasswordField fx:id="passwordField" promptText="Password"
+                               GridPane.rowIndex="1" GridPane.columnIndex="1"
+                               styleClass="form-input"/>
+
+                <Label text="Store" GridPane.rowIndex="2" GridPane.columnIndex="0"
+                       styleClass="form-label"/>
+                <TextField fx:id="tenantSlugField" promptText="demo-store"
+                           GridPane.rowIndex="2" GridPane.columnIndex="1"
+                           styleClass="form-input"/>
+            </GridPane>
+
+            <!-- Sign In button -->
+            <Button fx:id="loginButton" text="Sign In →"
+                    maxWidth="Infinity" styleClass="primary-button"
+                    onAction="#handleLogin"/>
+
+            <!-- Loading indicator — shown while API call is in progress -->
+            <ProgressIndicator fx:id="loadingIndicator"
+                               visible="false" managed="false"
+                               maxWidth="32" maxHeight="32"
+                               VBox.vgrow="NEVER"/>
+        </VBox>
+
+        <!-- Version footer -->
+        <Label text="UniversalPOS v0.6.0  |  API: localhost:8080"
+               styleClass="footer-label"/>
+    </VBox>
+</AnchorPane>

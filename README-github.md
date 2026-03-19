@@ -1,148 +1,225 @@
 # 🏪 UniversalPOS
 
-An enterprise-grade, multi-tenant Point-of-Sale system built in Java — inspired by Oracle Retail Xstore, the platform powering Guitar Center and thousands of major retailers.
+[![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
 
-Any company can deploy this, configure it for their brand, and run a full store operation from it.
+> An enterprise-grade, multi-tenant Point-of-Sale system built in Java —
+> modeled after Oracle Retail Xstore, the platform powering Guitar Center
+> and thousands of major retailers worldwide.
+
+Any company can deploy this, configure it for their brand, and run a full
+store operation from it — multiple locations, multiple staff roles, full
+inventory, sales, returns, and reporting.
 
 ---
 
-## ✨ Features — Phase 1 Complete
+## 🤔 What Is This?
 
-| Feature | Status |
+Most POS systems you interact with day-to-day (Guitar Center, Best Buy, Foot Locker)
+run on enterprise Java backends. This project builds exactly that kind of system
+from scratch — not a toy tutorial, but a real architecture with the same patterns
+those systems use.
+
+**Multi-tenant** means one running instance can power many different stores.
+Every piece of data — products, customers, transactions — is isolated per company
+using a `tenant_id`. Store A can never see Store B's data.
+
+**Why Java?** Type safety, Oracle database compatibility, JavaFX for the
+terminal UI, and direct alignment with real enterprise POS platforms.
+
+---
+
+## ✅ What's Built
+
+| Area | Features |
 |---|---|
-| Employee login + JWT auth | ✅ |
-| Multi-store / multi-tenant isolation | ✅ |
-| Tenant configuration API | ✅ |
-| Employee management (create, update, password change) | ✅ |
-| Customer lookup (phone, email, loyalty card, name) | ✅ |
-| Loyalty tier system (Bronze → Silver → Gold → Platinum) | ✅ |
-| Discount Engine (percent, fixed, tier-based, coupon codes) | ✅ |
-| Discount rule management API | ✅ |
-| Product catalog (create, update, search, barcode lookup) | ✅ |
-| Full sales transaction processing | ✅ |
-| Cash change calculation | ✅ |
-| Transaction void (Manager+) | ✅ |
-| Transaction lookup by ID | ✅ |
-| PDF receipt generation | ✅ |
-| Email receipt (branded HTML) | ✅ |
-| Async audit trail | ✅ |
-| Supplier management | ✅ |
-| Purchase orders (create, submit, receive) | ✅ |
-| Partial PO receipt support | ✅ |
-| Low stock alerts | ✅ |
-| Manual stock adjustments (damage, theft, correction) | ✅ |
-| Physical stock count sessions with variance tracking | ✅ |
-| Full return processing (partial + full) | ✅ |
-| Return reason codes (configurable per store) | ✅ |
-| Exchange workflow (return + new items, net billing) | ✅ |
-| Inventory auto-restocked on return | ✅ |
-| Loyalty points reversed on return | ✅ |
-| Daily sales report (revenue, returns, hourly) | ✅ |
-| Top products by revenue and units sold | ✅ |
-| Employee performance report | ✅ |
-| Inventory shrinkage report | ✅ |
-| Low stock report with suggested order qty | ✅ |
-| JavaFX register terminal UI | 🔜 Phase 4 — not yet built |
+| **Auth** | JWT login, BCrypt passwords, roles (CASHIER / MANAGER / ADMIN) |
+| **Tenants** | Multi-store config — branding, tax rate, receipt text, timezone |
+| **Employees** | Create, update, deactivate staff; password management |
+| **Customers** | Search by name/phone/email/loyalty card; loyalty tier system |
+| **Loyalty** | BRONZE → SILVER → GOLD → PLATINUM; points earned per sale |
+| **Products** | Full catalog with SKU, barcode, category, cost, reorder point |
+| **Discounts** | Percent, fixed amount, loyalty-tier, coupon code — engine picks best |
+| **Transactions** | Full sale pipeline: stock check → discount → tax → persist → audit |
+| **Void** | Manager-level void with full stock reversal |
+| **Receipts** | PDF thermal-style receipt + branded HTML email receipt |
+| **Inventory** | Suppliers, purchase orders (partial receipt), stock adjustments |
+| **Stock Counts** | Physical count sessions with variance detection and auto-correction |
+| **Returns** | Full and partial returns against original sale |
+| **Exchanges** | Return items + take new ones; net billing calculated |
+| **Return Reasons** | Configurable reason codes per store with manager-approval flag |
+| **Reports** | Daily sales, top products, employee performance, shrinkage, low stock |
+| **Audit Trail** | Every mutation permanently logged — who did what and when |
 
 ---
 
 ## ⚠️ Java Version Requirement
 
-**Use Java 21 LTS exactly.** Java 22, 23, 24, and 25 all break Lombok due to internal compiler changes. Java 21 is supported until 2031.
+**You must use Java 21 LTS.** Java 22, 23, 24, and 25 all break Lombok,
+the library that generates boilerplate code in this project. Java 21 is
+the enterprise standard — it's what Oracle Xstore itself runs on — and is
+supported until 2031.
 
-Download: https://adoptium.net/temurin/releases/?version=21
+Download Temurin 21: https://adoptium.net/temurin/releases/?version=21
+
+If you already have a newer Java installed, you can keep it. Just tell Maven
+which one to use before building:
+```bash
+# Windows
+set JAVA_HOME=C:\Program Files\Eclipse Adoptium\jdk-21.0.x.x-hotspot
+
+# Mac/Linux
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home
+```
 
 ---
 
 ## 🧰 Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Language | Java 21 LTS |
-| Framework | Spring Boot 3.4.4 |
-| Database | Oracle 21c |
-| ORM | Hibernate 6 / Spring Data JPA |
-| Migrations | Flyway 10 |
-| Security | Spring Security + JWT |
-| Terminal UI | JavaFX 21 (Phase 4) |
-| PDF | Apache PDFBox 3 |
-| Email | Jakarta Mail + Thymeleaf |
-| Build | Maven (multi-module) |
-| Containers | Docker + Docker Compose |
+| Layer | Technology | Why |
+|---|---|---|
+| Language | Java 21 LTS | Type safety, Oracle compatibility, JavaFX |
+| Framework | Spring Boot 3.4.4 | Industry standard enterprise Java |
+| Database | Oracle 21c | Same DB as real Xstore deployments |
+| ORM | Hibernate 6 + Spring Data JPA | Entity mapping + repository pattern |
+| Migrations | Flyway 10 | Schema versioning — DB changes are auditable |
+| Security | Spring Security + JWT | Stateless auth, role-based access |
+| Terminal UI | JavaFX 21 | Desktop register interface (Phase 4) |
+| PDF Receipts | Apache PDFBox 3 | Thermal-style receipt generation |
+| Email | Jakarta Mail + Thymeleaf | Branded HTML email receipts |
+| Build | Maven (multi-module) | Separate modules for API and terminal |
+| Containers | Docker + Docker Compose | Oracle XE + MailHog for local dev |
+
+---
+
+## 📁 Project Layout
+
+```
+universal-pos/
+│
+├── pos-api/                        ← Spring Boot REST API (the backend brain)
+│   ├── src/main/java/
+│   │   └── com/universalpos/
+│   │       ├── controller/         ← HTTP endpoints (one per resource area)
+│   │       ├── service/            ← Business logic lives here
+│   │       ├── domain/             ← JPA entities (Java ↔ Oracle table mapping)
+│   │       ├── repository/         ← Database queries (Spring Data)
+│   │       ├── dto/                ← Request/response shapes
+│   │       ├── engine/             ← Discount calculation engine
+│   │       ├── security/           ← JWT filter, token provider
+│   │       └── config/             ← Spring Security, async, app settings
+│   └── src/main/resources/
+│       ├── db/migration/           ← Flyway SQL files (V1, V2, V3 ... V5)
+│       ├── templates/email/        ← Thymeleaf HTML email template
+│       ├── application.yml         ← Main config (DB, Flyway, Hibernate)
+│       └── application-local.yml   ← Local dev overrides (MailHog, logging)
+│
+├── pos-terminal/                   ← JavaFX register UI (Phase 4 — stub)
+│
+├── docker/
+│   └── docker-compose.yml          ← Starts Oracle XE + MailHog
+│
+├── scripts/
+│   ├── login.sh                    ← Mac/Linux: logs in and saves $TOKEN
+│   └── login.bat                   ← Windows: logs in and saves %TOKEN%
+│
+└── .mvn/
+    └── jvm.config                  ← JVM flags for Lombok on Java 21+
+```
+
+---
+
+## 🔧 What You Need to Install
+
+| Tool | Version | Link | Notes |
+|---|---|---|---|
+| Java JDK | **21 LTS exactly** | https://adoptium.net/temurin/releases/?version=21 | Not 22, 23, 24, or 25 |
+| Maven | 3.9+ | https://maven.apache.org/download.cgi | Or use `mvnw` wrapper |
+| Docker Desktop | Latest | https://www.docker.com/products/docker-desktop | Needs 4 GB RAM allocated |
+| jq | Latest | https://jqlang.github.io/jq/download/ | Optional — used by login scripts |
+
+No IDE required — VS Code with the Java Extension Pack works great.
 
 ---
 
 ## 🚀 Quick Start
 
-**Prerequisites:** Java 21 LTS, Maven 3.9+, Docker Desktop (4 GB RAM)
-
 ```bash
-# 1. Start Oracle + MailHog
+# 1. Start Oracle database + MailHog (local email catcher)
 cd docker && docker-compose up -d
-docker logs -f universalpos-oracle   # wait for: DATABASE IS READY TO USE!
 
-# 2. Build and run
+# 2. Wait for Oracle to finish starting (~90 seconds first time)
+docker logs -f universalpos-oracle
+# Wait until you see:  DATABASE IS READY TO USE!
+# Then press Ctrl+C
+
+# 3. Build
 cd .. && mvn clean install -DskipTests
+
+# 4. Run
 cd pos-api && mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-Swagger UI: `http://localhost:8080/api/swagger-ui.html`
+Server starts at: `http://localhost:8080/api`
 
-**Quick login (saves token to $TOKEN / %TOKEN%):**
+Swagger (interactive API docs): `http://localhost:8080/api/swagger-ui.html`
+
+**Log in and save your token (do this once per terminal session):**
 ```bash
-# Mac/Linux
-source scripts/login.sh
-
 # Windows
 scripts\login.bat
 
-# Then use the token:
-curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/api/customers/search?q=Jane
+# Mac/Linux (must use "source")
+source scripts/login.sh
+
+# Then every curl uses the saved token:
+curl -H "Authorization: Bearer %TOKEN%" http://localhost:8080/api/products/search?q=guitar
 ```
 
----
+Default login: `admin@universalpos.local` / `ChangeMe123!` / `demo-store`
 
-## 📁 Project Structure
+**Run the JavaFX terminal** (backend must be running first):
+```bash
+cd pos-terminal && mvn compile javafx:run
+```
 
-```
-universal-pos/
-├── pos-api/          Spring Boot REST API
-├── pos-terminal/     JavaFX register UI (Phase 4)
-├── docker/           Docker Compose + Oracle init
-├── scripts/          login.sh / login.bat — JWT token helpers
-├── PROJECT.md        Full architecture and decision log
-└── README.md         This file
-```
+> **Change the default password** after first login. Get the admin employee ID
+> from `GET /employees`, then call `POST /employees/{id}/change-password`
+> with `{"newPassword": "YourNewPassword"}`.
 
 ---
 
 ## 📡 API Overview
 
-| Area | Endpoint | Notes |
-|---|---|---|
-| Auth | `POST /auth/login` | Returns JWT token |
-| Tenants | `GET/PUT /tenants/current` | View/update store config |
-| Employees | `GET/POST /employees` | Staff management (Admin) |
-| Customers | `GET /customers/search` | Search + loyalty info |
-| Products | `GET /products/search` | + barcode lookup |
-| Discounts | `GET/POST /discounts` | Rule management |
-| Transactions | `POST /transactions` | Process a sale |
-| Transactions | `POST /transactions/{id}/void` | Manager+ |
-| Receipts | `POST /receipts/{id}/email` | Email receipt |
-| Receipts | `GET /receipts/{id}/pdf` | Download PDF |
-| Inventory | `GET /inventory/low-stock` | Reorder alerts |
-| Inventory | `POST /inventory/purchase-orders` | Create PO |
-| Inventory | `POST /inventory/stock-counts/start` | Count session |
-| Returns | `GET /returns/reasons` | List return reason codes |
-| Returns | `POST /returns` | Process a return (refund) |
-| Returns | `POST /returns/exchange` | Process an exchange |
-| Reports | `GET /reports/daily` | Daily sales summary (Manager+) |
-| Reports | `GET /reports/top-products` | Best sellers (Manager+) |
-| Reports | `GET /reports/employee-performance` | Per-cashier stats (Manager+) |
-| Reports | `GET /reports/shrinkage` | Inventory losses (Manager+) |
-| Reports | `GET /reports/low-stock` | Reorder alerts (Manager+) |
+All endpoints require `Authorization: Bearer <token>` except `/auth/login`.
+Full interactive docs at `/api/swagger-ui.html`.
 
-Full interactive docs at `/api/swagger-ui.html`
+| Area | Key Endpoints |
+|---|---|
+| Auth | `POST /auth/login` |
+| Tenants | `GET /PUT /tenants/current` |
+| Employees | `GET/POST/PUT /employees` |
+| Customers | `GET /customers/search?q=` |
+| Products | `GET /products/search?q=`, `GET /products/barcode/{barcode}` |
+| Discounts | `GET/POST/PUT/DELETE /discounts` |
+| Transactions | `POST /transactions`, `GET /transactions/{id}`, `POST /transactions/{id}/void` |
+| Receipts | `POST /receipts/{id}/email`, `GET /receipts/{id}/pdf` |
+| Returns | `POST /returns`, `POST /returns/exchange`, `GET /returns/reasons` |
+| Inventory | `GET /inventory/low-stock`, `POST /inventory/purchase-orders` |
+| Reports | `GET /reports/daily`, `/reports/top-products`, `/reports/employee-performance` |
+
+---
+
+## 📦 Changelog (Summary)
+
+| Version | What Changed |
+|---|---|
+| **0.1.0** | Project scaffolded — Maven multi-module, Oracle + Flyway + Spring Boot wired up |
+| **0.2.0** | Phase 1 complete — full auth, customers, products, discount engine, transactions, receipts, audit trail |
+| **0.3.0** | Inventory system — suppliers, purchase orders, stock counts, manual adjustments |
+| **0.4.0** | Management APIs — employee, discount, tenant, product service layer; JWT token helper scripts |
+| **0.5.0** | Phase 2 — returns and exchanges with partial return support, reason codes, inventory restock, loyalty reversal |
+| **0.6.0** | Phase 3 — 5 reporting endpoints: daily sales, top products, employee performance, shrinkage, low stock |
+| **0.7.0** | Phase 4 — JavaFX terminal UI: login, register, cart, payment, manager PIN, returns, dark theme |: daily sales, top products, employee performance, shrinkage, low stock |
 
 ---
 
@@ -151,7 +228,7 @@ Full interactive docs at `/api/swagger-ui.html`
 - [x] Phase 1 — Full backend: auth, customers, products, discounts, transactions, receipts, inventory
 - [x] Phase 2 — Returns & exchanges (partial returns, exchanges, reason codes, restock, loyalty reversal)
 - [x] Phase 3 — Reporting dashboard (daily sales, top products, employee performance, shrinkage, low stock)
-- [ ] Phase 4 — JavaFX register terminal UI
+- [x] Phase 4 — JavaFX register terminal UI (login, register, cart, payment, manager PIN, returns)
 - [ ] Phase 5 — Integration tests + production hardening
 
 ---

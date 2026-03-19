@@ -6,7 +6,6 @@
 
 ---
 
-<<<<<<< HEAD
 ## 📄 About These Docs — Three Files, Each With a Job
 
 This project uses three documentation files. Here is what each one is for and who sees it:
@@ -32,53 +31,6 @@ That's it. Three files, three levels of detail, only one goes to GitHub.
 ---
 
 ## 📖 What Is This? (Plain English)
-=======
-## ✨ Features — Phase 1 Complete
-
-| Feature | Status |
-|---|---|
-| Employee login + JWT auth | ✅ |
-| Multi-store / multi-tenant isolation | ✅ |
-| Tenant configuration API | ✅ |
-| Employee management (create, update, password change) | ✅ |
-| Customer lookup (phone, email, loyalty card, name) | ✅ |
-| Loyalty tier system (Bronze → Silver → Gold → Platinum) | ✅ |
-| Discount Engine (percent, fixed, tier-based, coupon codes) | ✅ |
-| Discount rule management API | ✅ |
-| Product catalog (create, update, search, barcode lookup) | ✅ |
-| Full sales transaction processing | ✅ |
-| Cash change calculation | ✅ |
-| Transaction void (Manager+) | ✅ |
-| Transaction lookup by ID | ✅ |
-| PDF receipt generation | ✅ |
-| Email receipt (branded HTML) | ✅ |
-| Async audit trail | ✅ |
-| Supplier management | ✅ |
-| Purchase orders (create, submit, receive) | ✅ |
-| Partial PO receipt support | ✅ |
-| Low stock alerts | ✅ |
-| Manual stock adjustments (damage, theft, correction) | ✅ |
-| Physical stock count sessions with variance tracking | ✅ |
-| Full return processing (partial + full) | ✅ |
-| Return reason codes (configurable per store) | ✅ |
-| Exchange workflow (return + new items, net billing) | ✅ |
-| Inventory auto-restocked on return | ✅ |
-| Loyalty points reversed on return | ✅ |
-| Manager reporting dashboard | 🔜 Phase 3 |
-| JavaFX register terminal UI | 🔜 Phase 4 |
-
----
-
-## ⚠️ Java Version Requirement
-
-**Use Java 21 LTS exactly.** Java 22, 23, 24, and 25 all break Lombok due to internal compiler changes. Java 21 is supported until 2031.
-
-Download: https://adoptium.net/temurin/releases/?version=21
-
----
-
-## 🧰 Tech Stack
->>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 
 Think of this project as building the software that runs a cash register — but a really powerful one, the kind you'd find at Guitar Center, Best Buy, or a clothing chain.
 
@@ -98,7 +50,6 @@ This project builds all of that, in Java, using the same technologies that real 
 
 ---
 
-<<<<<<< HEAD
 ## ✨ What's Built So Far (Phase 1 Complete)
 
 | Feature | Done? | What it means in plain English |
@@ -116,9 +67,16 @@ This project builds all of that, in Java, using the same technologies that real 
 | Print receipt (PDF) | ✅ | Generates a real PDF receipt like a thermal printer would print |
 | Email receipt | ✅ | Sends a branded HTML email receipt to the customer |
 | Audit trail | ✅ | Every action is permanently logged — who did what and when |
-| Returns / exchanges | 🔜 | Coming in Phase 2 |
-| Manager reports | 🔜 | Coming in Phase 3 |
-| Register screen (UI) | 🔜 | The actual visual cash register — coming in Phase 4 |
+| Returns / exchanges | ✅ | Full + partial returns, exchanges, reason codes, restock, loyalty reversal |
+| Manager reports | ✅ | Daily sales, top products, employee perf, shrinkage, low stock |
+| JavaFX login screen | ✅ | Dark themed, Enter key support, loading state |
+| Product search + barcode | ✅ | Live search, add to cart, qty management |
+| Customer lookup | ✅ | Attach loyalty customer to sale |
+| Shopping cart | ✅ | ObservableList, live totals, remove items |
+| Payment screen | ✅ | Cash/card/gift, change calculator, confirmation |
+| Manager PIN overlay | ✅ | Re-auth with manager credentials for voids |
+| Returns screen | ✅ | Look up by receipt, select items, reasons |
+| Dark theme UI | ✅ | Complete CSS stylesheet, 1280×720 |
 
 ---
 
@@ -796,7 +754,30 @@ curl -X POST http://localhost:8080/api/auth/login \
 
 That long `eyJ...` string is your **JWT token** — your proof of identity for every other request. Copy the whole token value.
 
-> ⚠️ Change the default password (`ChangeMe123!`) once employee management is built in Phase 3.
+> ⚠️ **Change the default admin password before doing anything else.** The seed data password `ChangeMe123!` is for first-run only. Here's how to change it now that employee management is built:
+>
+> First, find the admin employee's ID:
+> ```bash
+> curl -H "Authorization: Bearer %TOKEN%" http://localhost:8080/api/employees
+> ```
+> Look for `admin@universalpos.local` and note the `employeeId` value (usually `1`).
+>
+> Then change the password:
+> ```bash
+> curl -X POST http://localhost:8080/api/employees/1/change-password \
+>   -H "Authorization: Bearer %TOKEN%" \
+>   -H "Content-Type: application/json" \
+>   -d "{\"newPassword\": \"YourNewSecurePassword123!\"}"
+> ```
+>
+> On Windows with `%TOKEN%`:
+> ```bash
+> curl -X POST http://localhost:8080/api/employees/1/change-password ^
+>   -H "Authorization: Bearer %TOKEN%" ^
+>   -H "Content-Type: application/json" ^
+>   -d "{\"newPassword\": \"YourNewSecurePassword123!\"}"
+> ```
+> After changing it, run `scripts\login.bat` again with the new password to get a fresh token.
 
 ---
 
@@ -812,6 +793,30 @@ curl -H "Authorization: Bearer YOUR_TOKEN_HERE" \
 **What `Authorization: Bearer <token>` means:** Every protected endpoint requires you to prove who you are. You do this by sending the token in this header. The server reads it, checks the signature, and knows you're a logged-in ADMIN for the demo-store tenant.
 
 You'll get back an empty results list (no customers yet — that's expected). In the next section, you'll create a customer and process a full sale.
+
+---
+
+### ⭐ Running the JavaFX Terminal
+
+The backend API must be running first (Phase 1 server), then:
+
+```bash
+# From the project root
+cd pos-terminal
+mvn javafx:run
+```
+
+The terminal opens at 1280×720. Log in with the same credentials as the API:
+- Email: `admin@universalpos.local`
+- Password: `ChangeMe123!`
+- Store: `demo-store`
+
+The terminal connects to `http://localhost:8080/api` by default.
+
+**Keyboard shortcuts:**
+- Enter on any login field → submits the form
+- Enter on product search → searches immediately
+- Manager PIN dialog → appears automatically when voiding
 
 ---
 
@@ -953,34 +958,6 @@ curl -X POST http://localhost:8080/api/receipts/1/email \
 curl -H "Authorization: Bearer TOKEN" \
   "http://localhost:8080/api/receipts/1/pdf" \
   --output receipt.pdf
-=======
-## 🚀 Quick Start
-
-**Prerequisites:** Java 21 LTS, Maven 3.9+, Docker Desktop (4 GB RAM)
-
-```bash
-# 1. Start Oracle + MailHog
-cd docker && docker-compose up -d
-docker logs -f universalpos-oracle   # wait for: DATABASE IS READY TO USE!
-
-# 2. Build and run
-cd .. && mvn clean install -DskipTests
-cd pos-api && mvn spring-boot:run -Dspring-boot.run.profiles=local
-```
-
-Swagger UI: `http://localhost:8080/api/swagger-ui.html`
-
-**Quick login (saves token to $TOKEN / %TOKEN%):**
-```bash
-# Mac/Linux
-source scripts/login.sh
-
-# Windows
-scripts\login.bat
-
-# Then use the token:
-curl -H "Authorization: Bearer $TOKEN" http://localhost:8080/api/customers/search?q=Jane
->>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 ```
 
 ---
@@ -997,18 +974,8 @@ cd pos-api
 # (These don't need the database — they run entirely in memory)
 mvn test
 ```
-<<<<<<< HEAD
 
 You'll see output like:
-=======
-universal-pos/
-├── pos-api/          Spring Boot REST API
-├── pos-terminal/     JavaFX register UI (Phase 4)
-├── docker/           Docker Compose + Oracle init
-├── scripts/          login.sh / login.bat — JWT token helpers
-├── PROJECT.md        Full architecture and decision log
-└── README.md         This file
->>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 ```
 [INFO] Tests run: 15, Failures: 0, Errors: 0, Skipped: 0
 [INFO] BUILD SUCCESS
@@ -1039,7 +1006,6 @@ pos-api/target/site/jacoco/index.html
 
 ## 📡 API Endpoints Reference
 
-<<<<<<< HEAD
 **Base URL:** `http://localhost:8080/api`
 
 All endpoints except `/auth/login` require: `Authorization: Bearer YOUR_TOKEN`
@@ -1154,34 +1120,11 @@ All report endpoints default to today (daily) or last 30 days if no dates provid
 | **ADMIN** | Everything a manager can + manage employees, configure store settings, view audit logs |
 
 The system enforces these automatically. If a cashier tries to void a transaction, they get a `403 Forbidden` error.
-=======
-| Area | Endpoint | Notes |
-|---|---|---|
-| Auth | `POST /auth/login` | Returns JWT token |
-| Tenants | `GET/PUT /tenants/current` | View/update store config |
-| Employees | `GET/POST /employees` | Staff management (Admin) |
-| Customers | `GET /customers/search` | Search + loyalty info |
-| Products | `GET /products/search` | + barcode lookup |
-| Discounts | `GET/POST /discounts` | Rule management |
-| Transactions | `POST /transactions` | Process a sale |
-| Transactions | `POST /transactions/{id}/void` | Manager+ |
-| Receipts | `POST /receipts/{id}/email` | Email receipt |
-| Receipts | `GET /receipts/{id}/pdf` | Download PDF |
-| Inventory | `GET /inventory/low-stock` | Reorder alerts |
-| Inventory | `POST /inventory/purchase-orders` | Create PO |
-| Inventory | `POST /inventory/stock-counts/start` | Count session |
-| Returns | `GET /returns/reasons` | List return reason codes |
-| Returns | `POST /returns` | Process a return (refund) |
-| Returns | `POST /returns/exchange` | Process an exchange |
-
-Full interactive docs at `/api/swagger-ui.html`
->>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 
 ---
 
 ## 🛠️ Troubleshooting — Plain English Fixes
 
-<<<<<<< HEAD
 ### "docker-compose: command not found"
 Docker Compose is now built into Docker Desktop as `docker compose` (no hyphen).
 Try: `docker compose up -d` instead of `docker-compose up -d`
@@ -1454,6 +1397,28 @@ All notable changes are documented here.
 
 ---
 
+---
+
+### [0.7.0] — 2026-03-19 — Phase 4: JavaFX Terminal UI
+
+**What was added:**
+
+Complete desktop register terminal built with JavaFX, using the dark theme designed to match a real POS touchscreen environment.
+
+**Architecture:** The terminal is a standalone JavaFX application in the `pos-terminal` Maven module. It talks to the backend exclusively via REST API — no direct database access. All HTTP calls go through a single `ApiClient` class (OkHttp) that automatically injects the JWT token. A `SessionState` singleton holds the current employee's token and role so any screen can check permissions without passing data everywhere.
+
+**Login screen** — email, password, store slug fields. Calls `POST /auth/login` on a background thread (so the UI never freezes). On success, stores the JWT in `SessionState` and navigates to the register screen. Pressing Enter in any field submits the form.
+
+**Register screen** — the main working screen. Split into four panels: product search (left), cart table (center), totals + actions (right), header with customer lookup (top). The cart is backed by a JavaFX `ObservableList<CartItem>` — adding or removing items automatically updates the table and recalculates totals. Product search calls `GET /products/search`. Barcode input calls `GET /products/barcode/{barcode}`. Customer search calls `GET /customers/search`.
+
+**Payment screen** — modal dialog opened from Checkout. Shows order summary with estimated tax. Payment method selection (Cash / Credit / Debit / Gift Card). For cash: live change calculation as the cashier types. On confirm: calls `POST /transactions` and shows a completion dialog with receipt number, change due, and loyalty points earned.
+
+**Manager PIN overlay** — modal dialog for manager-only actions (void). Instead of a PIN code, uses full credential re-authentication: the manager enters their email and password, the terminal verifies against the backend, checks their role, then restores the original cashier session. Fully auditable.
+
+**Returns screen** — modal dialog accessible from the register. Cashier enters the original receipt number. Terminal loads the transaction and shows all line items in a table with checkboxes. Cashier selects items to return, sets quantity, chooses whether to restock, and picks a reason code (loaded from `GET /returns/reasons`). Submits to `POST /returns`.
+
+**Dark theme CSS** — complete stylesheet (`terminal.css`) covering all controls: inputs, buttons, tables, toggles, panels, labels.
+
 ### [0.6.0] — 2026-03-19 — Phase 3: Reporting Dashboard
 
 **What was added:**
@@ -1596,22 +1561,14 @@ Project structure created. Tech stack selected. Architecture designed. Database 
 
 ## 🗺️ What's Coming Next
 
-- [x] Phase 1: Full backend — login, customers, products, discounts, sales, receipts
-- [ ] Phase 2: Returns and exchanges
-- [ ] Phase 3: Reporting dashboard + tenant management API
-- [ ] Phase 4: JavaFX terminal UI — the actual visual cash register screen
+- [x] Phase 1: Full backend — auth, customers, products, discounts, transactions, receipts, full inventory system, employee/tenant/discount management
+- [x] Phase 2: Returns & exchanges — partial returns, exchanges, reason codes, restock, loyalty reversal
+- [x] Phase 3: Reporting dashboard — daily sales, top products, employee performance, shrinkage, low stock
+- [x] Phase 4: JavaFX terminal UI — login, register, cart, payment, returns, manager PIN
 - [ ] Phase 5: Integration tests + production hardening
 - [ ] Future: Physical barcode scanner integration
 - [ ] Future: Credit card terminal (Stripe Terminal or PAX device SDK)
 - [ ] Future: Offline mode (keeps working if the network drops)
-=======
-- [x] Phase 1 — Full backend: auth, customers, products, discounts, transactions, receipts, inventory
-- [x] Phase 2 — Returns & exchanges (partial returns, exchanges, reason codes, restock, loyalty reversal)
-- [ ] Phase 2 — Returns & exchanges
-- [ ] Phase 3 — Reporting dashboard + admin tools
-- [ ] Phase 4 — JavaFX register terminal UI
-- [ ] Phase 5 — Integration tests + production hardening
->>>>>>> 72d0b9b3f4b5cbfe0e78b796dda8109c3b132832
 
 ---
 
