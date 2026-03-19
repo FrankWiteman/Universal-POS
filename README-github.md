@@ -37,8 +37,12 @@ Any company can deploy this, configure it for their brand, and run a full store 
 | Exchange workflow (return + new items, net billing) | ✅ |
 | Inventory auto-restocked on return | ✅ |
 | Loyalty points reversed on return | ✅ |
-| Manager reporting dashboard | 🔜 Phase 3 |
-| JavaFX register terminal UI | 🔜 Phase 4 |
+| Daily sales report (revenue, returns, hourly) | ✅ |
+| Top products by revenue and units sold | ✅ |
+| Employee performance report | ✅ |
+| Inventory shrinkage report | ✅ |
+| Low stock report with suggested order qty | ✅ |
+| JavaFX register terminal UI | 🔜 Phase 4 — not yet built |
 
 ---
 
@@ -132,6 +136,11 @@ universal-pos/
 | Returns | `GET /returns/reasons` | List return reason codes |
 | Returns | `POST /returns` | Process a return (refund) |
 | Returns | `POST /returns/exchange` | Process an exchange |
+| Reports | `GET /reports/daily` | Daily sales summary (Manager+) |
+| Reports | `GET /reports/top-products` | Best sellers (Manager+) |
+| Reports | `GET /reports/employee-performance` | Per-cashier stats (Manager+) |
+| Reports | `GET /reports/shrinkage` | Inventory losses (Manager+) |
+| Reports | `GET /reports/low-stock` | Reorder alerts (Manager+) |
 
 Full interactive docs at `/api/swagger-ui.html`
 
@@ -141,8 +150,7 @@ Full interactive docs at `/api/swagger-ui.html`
 
 - [x] Phase 1 — Full backend: auth, customers, products, discounts, transactions, receipts, inventory
 - [x] Phase 2 — Returns & exchanges (partial returns, exchanges, reason codes, restock, loyalty reversal)
-- [ ] Phase 2 — Returns & exchanges
-- [ ] Phase 3 — Reporting dashboard + admin tools
+- [x] Phase 3 — Reporting dashboard (daily sales, top products, employee performance, shrinkage, low stock)
 - [ ] Phase 4 — JavaFX register terminal UI
 - [ ] Phase 5 — Integration tests + production hardening
 
